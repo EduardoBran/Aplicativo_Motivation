@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <!-- menu superior -->
+    <!-- Menu Superior com ícones -->
     <View
         android:id="@+id/view_phrases_menu"
         android:layout_width="wrap_content"
@@ -52,7 +52,6 @@
         app:tint="@color/white" />
 
     <!--> TextView com nome do Usuário -->
-
     <TextView
         android:id="@+id/textview_name"
         android:layout_width="wrap_content"
@@ -61,16 +60,42 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="32dp"
         android:text="Olá Kotlin!"
-        android:textSize="24sp" />   
+        android:textSize="24sp" />
 
+    <!--> TextView onde será exibido as frases -->
+    <TextView
+        android:id="@+id/textview_phrase"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:layout_margin="8dp"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:text="Olá Kotlin! Olá Kotlin! Olá Kotlin! Olá Kotlin! Olá Kotlin! Olá Kotlin! Olá Kotlin! Olá Kotlin! Olá Kotlin! Olá Kotlin! Olá Kotlin! Olá Kotlin! Olá Kotlin!Olá Kotlin! Olá Kotlin! Olá Kotlin!" />
+
+    
 
 </RelativeLayout>
 
     <!--
-    Aguardar carregar vetores em Vector Asset
+Aguardar carregar vetores em Vector Asset
 
-    insert emoticon (nomear para ic_happy)
-    all inclusive   (nomear para ic_all)
-    light mode      (ic_sunny)
+insert emoticon (nomear para ic_happy)
+all inclusive   (nomear para ic_all)
+light mode      (ic_sunny)
+
+-> android:layout_centerHorizontal="true"
+- Usado em RelativeLayout
+Centraliza apenas no eixo X a View atual dentro do seu pai. A View mantém sua posição Y original.
+
+-> android:layout_centerInParent="true"
+- Usado em RelativeLayout
+Centraliza nos dois eixos (X e Y) a View atual dentro do seu pai — é equivalente a combinar
+layout_centerHorizontal="true" + layout_centerVertical="true".
+
+-> android:gravity="center"
+- Usado em contêineres (LinearLayout, FrameLayout, etc.) ou em Views de texto
+Alinha o conteúdo interno daquela View ou ViewGroup no centro.
 
     -->
