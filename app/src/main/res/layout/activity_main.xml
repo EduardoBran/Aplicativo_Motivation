@@ -68,13 +68,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:gravity="center"
         android:layout_margin="8dp"
+        android:gravity="center"
+        android:text="Olá Kotlin! Olá Kotlin! Olá Kotlin! Olá Kotlin! Olá Kotlin! Olá Kotlin! Olá Kotlin! Olá Kotlin! Olá Kotlin! Olá Kotlin! Olá Kotlin! Olá Kotlin! Olá Kotlin!Olá Kotlin! Olá Kotlin! Olá Kotlin!"
         android:textSize="18sp"
-        android:textStyle="bold"
-        android:text="Olá Kotlin! Olá Kotlin! Olá Kotlin! Olá Kotlin! Olá Kotlin! Olá Kotlin! Olá Kotlin! Olá Kotlin! Olá Kotlin! Olá Kotlin! Olá Kotlin! Olá Kotlin! Olá Kotlin!Olá Kotlin! Olá Kotlin! Olá Kotlin!" />
+        android:textStyle="bold" />
 
-    
+    <!-- Elemento View abaixo da frase -->
+
+    <View
+        android:layout_width="128dp"
+        android:layout_height="4dp"
+        android:layout_below="@id/textview_phrase"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:background="@color/purple"
+        android:elevation="4dp" />
 
 </RelativeLayout>
 
@@ -97,5 +106,8 @@ layout_centerHorizontal="true" + layout_centerVertical="true".
 -> android:gravity="center"
 - Usado em contêineres (LinearLayout, FrameLayout, etc.) ou em Views de texto
 Alinha o conteúdo interno daquela View ou ViewGroup no centro.
+
+-> android:elevation="4dp"
+Aplica sombra ao elemento.
 
     -->
