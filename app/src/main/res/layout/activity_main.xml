@@ -51,6 +51,18 @@
         android:src="@drawable/ic_sunny"
         app:tint="@color/white" />
 
+    <!--> TextView com nome do Usuário -->
+
+    <TextView
+        android:id="@+id/textview_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/view_phrases_menu"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="32dp"
+        android:text="Olá Kotlin!"
+        android:textSize="24sp" />   
+
 
 </RelativeLayout>
 
