@@ -38,7 +38,7 @@ class UserActivity : AppCompatActivity(), View.OnClickListener {
         verifyUserName()
 
         // Acesso aos elementos de interface
-        binding.buttonSave.setOnClickListener(this)
+        setListeners()
     }
 
     // Lida com eventos de click

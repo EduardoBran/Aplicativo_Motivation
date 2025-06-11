@@ -6,8 +6,8 @@ data class Phrase(val description: String, val category: Int)
 
 class PhraseRepository {
 
-    private val happy = MotivationConstants.PHRASE.HAPPY
-    private val sunny = MotivationConstants.PHRASE.SUNNY
+    private val happy = MotivationConstants.PHRASEFILTER.HAPPY
+    private val sunny = MotivationConstants.PHRASEFILTER.SUNNY
 
     private val listPhrases: List<Phrase> = listOf(
         Phrase("Não sabendo que era impossível, foi lá e fez.", happy),
@@ -26,7 +26,7 @@ class PhraseRepository {
     )
 
     // Obtém frase aleatória de acordo com o filtro
-    fun getPhrase(): String {
+    fun getPhrase(value: Int): String {
         return "bla bla bla"
     }
 }

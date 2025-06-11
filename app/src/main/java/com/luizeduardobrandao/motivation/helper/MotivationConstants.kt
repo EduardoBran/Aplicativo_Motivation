@@ -7,7 +7,7 @@ class MotivationConstants private constructor(){
         const val PERSON_NAME = "personName"
     }
 
-    object PHRASE {
+    object PHRASEFILTER {
         const val ALL = 0
         const val HAPPY = 1
         const val SUNNY = 2
