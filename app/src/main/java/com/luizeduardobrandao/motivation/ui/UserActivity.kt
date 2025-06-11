@@ -34,6 +34,9 @@ class UserActivity : AppCompatActivity(), View.OnClickListener {
         // Inicializa variáveis da classe
         namePreferences = NamePreferences(this)
 
+        // Inicializa mét0do para verificar se nome já foi salvo
+        verifyUserName()
+
         // Acesso aos elementos de interface
         binding.buttonSave.setOnClickListener(this)
     }
@@ -44,6 +47,16 @@ class UserActivity : AppCompatActivity(), View.OnClickListener {
             R.id.button_save -> {
                 handleButtonSave()
             }
+        }
+    }
+
+    // Verifica se namePreferences tem algum valor
+    private fun verifyUserName() {
+        val name = namePreferences.getStoredString(MotivationConstants.KEY.PERSON_NAME)
+        if (name.isNotEmpty()){
+            startActivity(Intent(this, MainActivity::class.java))
+            // Impede que seja possível voltar a Activity
+            finish()
         }
     }
 
