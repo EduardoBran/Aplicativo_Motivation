@@ -1,6 +1,7 @@
 package com.luizeduardobrandao.motivation.repository
 
 import com.luizeduardobrandao.motivation.helper.MotivationConstants
+import kotlin.random.Random
 
 data class Phrase(val description: String, val category: Int)
 
@@ -8,6 +9,7 @@ class PhraseRepository {
 
     private val happy = MotivationConstants.PHRASEFILTER.HAPPY
     private val sunny = MotivationConstants.PHRASEFILTER.SUNNY
+    private val all = MotivationConstants.PHRASEFILTER.ALL
 
     private val listPhrases: List<Phrase> = listOf(
         Phrase("Não sabendo que era impossível, foi lá e fez.", happy),
@@ -27,6 +29,17 @@ class PhraseRepository {
 
     // Obtém frase aleatória de acordo com o filtro
     fun getPhrase(value: Int): String {
-        return "bla bla bla"
+        // 1) Filtra a lista completa de frases:
+        //    - mantém apenas frases cuja categoria seja igual ao 'value' selecionado
+        //    - ou, se 'value' for o código ALL, mantém todas as frases
+        val filteredPhrases = listPhrases.filter { (it.category == value || value == all) }
+
+        // 2) Gera um índice aleatório entre 0 (inclusivo) e filteredPhrases.size (exclusivo)
+        //    Usamos Random.nextInt(n) para obter um inteiro aleatório no intervalo [0, n-1]
+        val randomIndex = Random.nextInt(filteredPhrases.size)
+
+        // 3) Retorna a descrição da frase que está naquela posição aleatória
+        //    filteredPhrases[randomIndex] é um objeto Phrase, e .description é a string que queremos
+        return filteredPhrases[randomIndex].description
     }
 }
