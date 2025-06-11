@@ -8,12 +8,16 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.luizeduardobrandao.motivation.R
 import com.luizeduardobrandao.motivation.databinding.ActivityMainBinding
+import com.luizeduardobrandao.motivation.helper.MotivationConstants
+import com.luizeduardobrandao.motivation.repository.NamePreferences
 
 // MainActivity agora implementa View.OnClickListener para receber callbacks de clique
 class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     // “binding” é o objeto gerado pelo View Binding que dá acesso a todas as Views de activity_main.xml
     private lateinit var binding: ActivityMainBinding
+    // instancia para poder usar em vários métodos diferentes
+    private lateinit var namePreferences: NamePreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,8 +38,14 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             insets
         }
 
+        // Inicializa variáveis
+        namePreferences = NamePreferences(this)
+
         // Registra os listeners de clique nos botões (delega para onClick(v: View)
         setListeners()
+
+        // Inicializa
+        showUserName()
     }
 
     // Recebe todos os cliques de Views registrados via "setOnClickListener(this)" (sempre apagar o "?" de "View?"
@@ -45,6 +55,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 handleNewPhrase()
             }
         }
+    }
+
+    // busca e exibe o nome do usuário
+    private fun showUserName(){
+        val name = namePreferences.getStoredString(MotivationConstants.KEY.PERSON_NAME)
+        binding.textviewName.text = name
     }
 
     // Função para implementar/lidar com a lógica ao clicar no botão (handle = lidar)

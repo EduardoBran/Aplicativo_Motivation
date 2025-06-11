@@ -59,7 +59,6 @@
         android:layout_below="@id/view_phrases_menu"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="32dp"
-        android:text="Olá Kotlin!"
         android:textSize="24sp" />
 
     <!--> TextView onde será exibido as frases -->
