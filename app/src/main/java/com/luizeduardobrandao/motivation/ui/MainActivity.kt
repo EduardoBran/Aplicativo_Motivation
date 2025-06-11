@@ -71,7 +71,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             // Se um dos ícones de filtro for clicado, muda o filtro
             R.id.image_all_inclusive,
             R.id.image_happy,
-            R.id.image_sunny -> handleFilter(v.id)
+            R.id.image_funny -> handleFilter(v.id)
 
             // Se o botão “Nova Frase” for clicado, atualiza a frase
             R.id.button_new_phrase -> refreshPhrase()
@@ -84,7 +84,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         binding.buttonNewPhrase.setOnClickListener (this)
         binding.imageAllInclusive.setOnClickListener (this)
         binding.imageHappy.setOnClickListener (this)
-        binding.imageSunny.setOnClickListener (this)
+        binding.imageFunny.setOnClickListener (this)
     }
 
     // Lê o nome do usuário de SharedPreferences e atualiza o TextView de saudação.
@@ -112,7 +112,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         // Primeiro, pinta todos os ícones de preto (estado não selecionado)
         binding.imageAllInclusive.setColorFilter(ContextCompat.getColor(this, R.color.black))
         binding.imageHappy.setColorFilter(ContextCompat.getColor(this, R.color.black))
-        binding.imageSunny.setColorFilter(ContextCompat.getColor(this, R.color.black))
+        binding.imageFunny.setColorFilter(ContextCompat.getColor(this, R.color.black))
 
         // Depois, de acordo com o id, atualiza a variável filter e chama highlightFilter()
         when (id) {
@@ -124,9 +124,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 filter = MotivationConstants.PHRASEFILTER.HAPPY
                 highlightFilter(binding.imageHappy)
             }
-            R.id.image_sunny -> {
-                filter = MotivationConstants.PHRASEFILTER.SUNNY
-                highlightFilter(binding.imageSunny)
+            R.id.image_funny -> {
+                filter = MotivationConstants.PHRASEFILTER.FUNNY
+                highlightFilter(binding.imageFunny)
             }
         }
     }
