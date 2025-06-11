@@ -68,6 +68,7 @@ class UserActivity : AppCompatActivity(), View.OnClickListener {
             startActivity(Intent(this, MainActivity::class.java))
 
             // Impede que seja possível voltar a Activity
+            finish()
         }
     }
 

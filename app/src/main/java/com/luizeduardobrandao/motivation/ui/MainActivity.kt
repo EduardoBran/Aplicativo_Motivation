@@ -60,7 +60,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     // busca e exibe o nome do usuário
     private fun showUserName(){
         val name = namePreferences.getStoredString(MotivationConstants.KEY.PERSON_NAME)
-        binding.textviewName.text = name
+
+        // binding.textviewName.text = name - exibe somente o nome
+        binding.textviewName.text = getString(R.string.label_name_user, name) // exibe o Olá corretamente usando @strings
+
     }
 
     // Função para implementar/lidar com a lógica ao clicar no botão (handle = lidar)
