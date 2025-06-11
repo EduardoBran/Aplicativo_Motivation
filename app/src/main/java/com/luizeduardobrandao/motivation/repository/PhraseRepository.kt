@@ -24,4 +24,9 @@ class PhraseRepository {
         Phrase("Se você acredita, faz toda a diferença.", sunny),
         Phrase("Riscos devem ser corridos, porque o maior perigo é não arriscar nada!", sunny)
     )
+
+    // Obtém frase aleatória de acordo com o filtro
+    fun getPhrase(): String {
+        return "bla bla bla"
+    }
 }

@@ -10,6 +10,7 @@ import com.luizeduardobrandao.motivation.R
 import com.luizeduardobrandao.motivation.databinding.ActivityMainBinding
 import com.luizeduardobrandao.motivation.helper.MotivationConstants
 import com.luizeduardobrandao.motivation.repository.NamePreferences
+import com.luizeduardobrandao.motivation.repository.PhraseRepository
 
 // MainActivity agora implementa View.OnClickListener para receber callbacks de clique
 class MainActivity : AppCompatActivity(), View.OnClickListener {
@@ -18,6 +19,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var binding: ActivityMainBinding
     // instancia para poder usar em vários métodos diferentes
     private lateinit var namePreferences: NamePreferences
+    // instancia PhraseRepository (nao precisa de lateinit pois nao recebe parâmetro)
+    private val phraseRepository = PhraseRepository()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,6 +49,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         // Inicializa
         showUserName()
+
+        // Mét0do que atualiza a frase
+        refreshPhrase()
     }
 
     // Recebe todos os cliques de Views registrados via "setOnClickListener(this)" (sempre apagar o "?" de "View?"
@@ -64,6 +70,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         // binding.textviewName.text = name - exibe somente o nome
         binding.textviewName.text = getString(R.string.label_name_user, name) // exibe o Olá corretamente usando @strings
 
+    }
+
+    // Exibe as frases
+    private fun refreshPhrase() {
+        binding.textviewPhrase.text = phraseRepository.getPhrase()
     }
 
     // Função para implementar/lidar com a lógica ao clicar no botão (handle = lidar)
