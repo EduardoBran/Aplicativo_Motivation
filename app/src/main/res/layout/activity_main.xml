@@ -17,7 +17,39 @@
         android:layout_alignParentEnd="true"
         android:background="@color/purple" />
 
-    
+    <ImageView
+        android:id="@+id/image_all_inclusive"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_alignTop="@+id/view_phrases_menu"
+        android:layout_alignBottom="@+id/view_phrases_menu"
+        android:layout_marginStart="32dp"
+        android:contentDescription="@string/desc_all"
+        android:src="@drawable/ic_all"
+        app:tint="@color/white" />
+
+    <ImageView
+        android:id="@+id/image_happy"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_alignTop="@+id/view_phrases_menu"
+        android:layout_alignBottom="@+id/view_phrases_menu"
+        android:layout_centerHorizontal="true"
+        android:contentDescription="@string/desc_happy"
+        android:src="@drawable/ic_happy"
+        app:tint="@color/white" />
+
+    <ImageView
+        android:id="@+id/image_sunny"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_alignTop="@+id/view_phrases_menu"
+        android:layout_alignBottom="@+id/view_phrases_menu"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="32dp"
+        android:contentDescription="@string/desc_sunny"
+        android:src="@drawable/ic_sunny"
+        app:tint="@color/white" />
 
 
 </RelativeLayout>
