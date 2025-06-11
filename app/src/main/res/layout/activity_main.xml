@@ -75,7 +75,6 @@
         android:textStyle="bold" />
 
     <!-- Elemento View abaixo da frase -->
-
     <View
         android:layout_width="128dp"
         android:layout_height="4dp"
@@ -84,6 +83,17 @@
         android:layout_marginTop="16dp"
         android:background="@color/purple"
         android:elevation="4dp" />
+
+    <!-- Botão Nova Frase -->
+    <Button
+        android:id="@+id/button_new_phrase"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="32dp"
+        android:backgroundTint="@color/purple"
+        android:text="Nova frase" />
 
 </RelativeLayout>
 
