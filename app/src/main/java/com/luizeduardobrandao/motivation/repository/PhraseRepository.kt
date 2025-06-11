@@ -1,11 +1,13 @@
 package com.luizeduardobrandao.motivation.repository
 
+import com.luizeduardobrandao.motivation.helper.MotivationConstants
+
 data class Phrase(val description: String, val category: Int)
 
 class PhraseRepository {
 
-    val happy = 1
-    val sunny = 2
+    private val happy = MotivationConstants.PHRASE.HAPPY
+    private val sunny = MotivationConstants.PHRASE.SUNNY
 
     private val listPhrases: List<Phrase> = listOf(
         Phrase("Não sabendo que era impossível, foi lá e fez.", happy),
