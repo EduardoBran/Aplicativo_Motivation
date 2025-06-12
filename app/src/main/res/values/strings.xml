@@ -6,6 +6,9 @@
 
     <string name="hint_your_name">Qual seu nome?</string>
 
+    <string name="label_user">Usuário</string>
+    <string name="label_phrase">Frase</string>
+
     <string name="desc_all">Todas as frases</string>
     <string name="desc_happy">Frase de motivação</string>
     <string name="desc_sunny">Frase para começar o dia</string>
@@ -14,6 +17,6 @@
     <string name="label_lets_begin">Vamos começar?</string>
     <string name="label_name_user">Olá, %1$s!</string>
 
-    <string name="error_mandatory_name">Nome não informado.</string>
+    <string name="error_mandatory_name">Informe seu nome.</string>
 
 </resources>
