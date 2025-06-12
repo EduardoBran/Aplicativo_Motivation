@@ -14,6 +14,7 @@ class PhraseRepository {
     private val langPt = MotivationConstants.LANGUAGE.PORTUGUESE
     private val langEn = MotivationConstants.LANGUAGE.ENGLISH
     private val langFr = MotivationConstants.LANGUAGE.FRENCH
+    private val langEs = MotivationConstants.LANGUAGE.SPANISH
 
     private val listPhrases: List<Phrase> = listOf(
 
@@ -104,7 +105,37 @@ class PhraseRepository {
         Phrase("Les grandes réussites commencent par un clic sur 'snooze'.", funny, langFr),
         Phrase("Crois en ton potentiel. Même s'il est en mode snooze.", funny, langFr),
         Phrase("Crois en tes rêves. Parce qu'être réveillé, c'est dur.", funny, langFr),
-        Phrase("N'abandonne pas ! Si les nouilles instantanées peuvent devenir un repas, toi aussi.", funny, langFr)
+        Phrase("N'abandonne pas ! Si les nouilles instantanées peuvent devenir un repas, toi aussi.", funny, langFr),
+
+        // Espanhol
+
+    Phrase("Sin saber que era imposible, fue y lo hizo.", happy, langEs),
+    Phrase("No estás derrotado cuando pierdes; estás derrotado cuando te rindes.", happy, langEs),
+    Phrase("¡Cuando está más oscuro, vemos más estrellas!", happy, langEs),
+    Phrase("La locura es hacer siempre lo mismo y esperar resultados diferentes.", happy, langEs),
+    Phrase("No te detengas cuando estés cansado; detente cuando hayas terminado.", happy, langEs),
+    Phrase("¿Qué puedes hacer ahora que tendrá el mayor impacto en tu éxito?", happy, langEs),
+    Phrase("La mejor manera de predecir el futuro es inventarlo.", happy, langEs),
+    Phrase("Fallamos todos los tiros que no intentamos.", happy, langEs),
+    Phrase("El fracaso es el condimento que le da sabor al éxito.", happy, langEs),
+    Phrase("¡Mientras no estemos comprometidos, habrá vacilación!", happy, langEs),
+    Phrase("Si no sabes a dónde quieres ir, cualquier camino te llevará allí.", happy, langEs),
+    Phrase("Si crees, marca toda la diferencia.", happy, langEs),
+    Phrase("Se deben tomar riesgos, porque el mayor peligro es no arriesgar nada.", happy, langEs),
+
+    Phrase("Si la vida te da limones, aprende a hacer una caipirinha.", funny, langEs),
+    Phrase("Persigue tus sueños. Si no funciona, vuelve a dormir.", funny, langEs),
+    Phrase("Me desperté motivado... luego me volví a dormir.", funny, langEs),
+    Phrase("Eres único... igual que todo el mundo.", funny, langEs),
+    Phrase("Lo importante es no rendirse... ¡excepto con las dietas; esas sí!", funny, langEs),
+    Phrase("Eres capaz de todo. Especialmente de cometer locuras con confianza.", funny, langEs),
+    Phrase("Si todo sale mal hoy, relájate: mañana podría ser peor.", funny, langEs),
+    Phrase("No tengas miedo de fracasar. ¡Teme quedarte sin Wi-Fi!", funny, langEs),
+    Phrase("Errar es humano. ¡Culpar a un compañero es estrategia!", funny, langEs),
+    Phrase("Los grandes logros comienzan con un clic en 'posponer alarma'.", funny, langEs),
+    Phrase("Cree en tu potencial. Incluso si está en modo posponer.", funny, langEs),
+    Phrase("Cree en tus sueños. Porque estar despierto es difícil.", funny, langEs),
+    Phrase("¡No te rindas! Si los fideos instantáneos pueden convertirse en una comida, tú también.", funny, langEs)
 
     )
 
@@ -113,7 +144,7 @@ class PhraseRepository {
 
         // 0) Tratamento para caso não tenha a língua escolhida no dispositivo
         var langFilter = language.lowercase()
-        if (language !in listOf(langPt, langEn, langFr)){
+        if (language !in listOf(langPt, langEn, langFr, langEs)){
             langFilter = MotivationConstants.LANGUAGE.PORTUGUESE
         }
 
