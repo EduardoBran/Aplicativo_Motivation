@@ -45,4 +45,8 @@ Clicar com botão direito em values < New < Value Resource File
     - Depois irá surgir na pasta "strings" um "strings.xml" sem bandeira.
 
 
+Agora  em strings.xml (en-rUS) adicionar os novos valores de string em inglês
+Depois em strings.xml (fr)     adicionar os novos valores de string em francês
+
+
 -->
