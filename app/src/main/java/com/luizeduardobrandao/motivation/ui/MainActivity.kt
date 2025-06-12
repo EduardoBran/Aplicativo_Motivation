@@ -29,6 +29,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     // Repositório que fornece frases a partir do filtro (nao precisa de lateinit pois nao recebe parâmetro)
     private val phraseRepository = PhraseRepository()
 
+    // Guarda a frase exibida para restaurar após rotação
+    private var currentPhrase: String = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -51,17 +54,48 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         // Cria a instância de SecurityPreferences para ler e escrever NamePreferences
         namePreferences = NamePreferences(this)
 
+        // --- Restaura estado em caso de rotação ---
+        if (savedInstanceState != null) {
+
+            // 1) Recupera o filtro salvo (ou ALL caso não exista)
+            filter = savedInstanceState.getInt("filter", MotivationConstants.PHRASEFILTER.ALL)
+
+            // 2) Recupera a frase salva (ou string vazia caso não exista)
+            currentPhrase = savedInstanceState.getString("phrase") ?: ""
+
+            // 3) Reseta a cor de todos os ícones para não selecionado (preto)
+            binding.imageAllInclusive.setColorFilter(ContextCompat.getColor(this, R.color.black))
+            binding.imageHappy.setColorFilter(ContextCompat.getColor(this, R.color.black))
+            binding.imageFunny.setColorFilter(ContextCompat.getColor(this, R.color.black))
+
+            // 4) Destaca apenas o ícone correspondente ao filtro restaurado
+            when (filter) {
+                MotivationConstants.PHRASEFILTER.ALL   -> highlightFilter(binding.imageAllInclusive)
+                MotivationConstants.PHRASEFILTER.HAPPY -> highlightFilter(binding.imageHappy)
+                MotivationConstants.PHRASEFILTER.FUNNY -> highlightFilter(binding.imageFunny)
+            }
+
+            // 4) Reexibe exatamente a mesma frase que estava na tela
+            binding.textviewPhrase.text = currentPhrase
+
+        } else {
+            // --- Estado inicial: sem filtro explícito (mas ALL visual) e frase nova ---
+            handleFilter(R.id.image_all_inclusive)
+            refreshPhrase()
+        }
+
         // Registra os listeners de clique nos botões (delega para onClick(v: View)
         setListeners()
 
-        // Inicializa o filtro padrão (ALL) e já destaca o ícone "ic_image_all_inclusive"
-        handleFilter(R.id.image_all_inclusive)
-
-        // Atualiza a frase mostrada usando o filtro atual
-        refreshPhrase()
-
         // Exibe o nome do usuário na saudação
         showUserName()
+    }
+
+    // Salva o estado atual (filtro e frase) antes da Activity ser destruída em rotação.
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt("filter", filter)
+        outState.putString("phrase", currentPhrase)
     }
 
     // Recebe todos os cliques de Views registrados via "setOnClickListener(this)" (sempre apagar o "?" de "View?")
@@ -78,8 +112,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
-    // Configura o clique do botão “Nova Frase” para chamar nosso onClick
-    // (Função para centralizar os elementos caso tenha mais do que um)
+    // Vincula esta Activity como listener de clique para cada view de interesse.
     private fun setListeners(){
         binding.buttonNewPhrase.setOnClickListener (this)
         binding.imageAllInclusive.setOnClickListener (this)
@@ -97,8 +130,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     // Busca uma nova frase do repositório, passando o filtro atual e atualiza o texto na tela.
+    // Também armazena em currentPhrase para restauração futura.
     private fun refreshPhrase() {
-        binding.textviewPhrase.text = phraseRepository.getPhrase(filter)
+        currentPhrase = phraseRepository.getPhrase(filter)
+        binding.textviewPhrase.text = currentPhrase
     }
 
     // Destaca o ícone passado como parâmetro, pintando-o de branco.
@@ -107,6 +142,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         view.setColorFilter(ContextCompat.getColor(this, R.color.white))
     }
 
+    // Atualiza o filtro interno e o destaque visual nos ícones.
+    // Sempre pinta todos de preto antes de destacar o escolhido.
     private fun handleFilter(id: Int) {
 
         // Primeiro, pinta todos os ícones de preto (estado não selecionado)
@@ -129,6 +166,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 highlightFilter(binding.imageFunny)
             }
         }
+        // Ao trocar o filtro, já exibe a frase correspondente
+        refreshPhrase()
     }
 }
 
@@ -136,22 +175,37 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
 Como as funções se conectam
 
-- onCreate(): infla o layout, ajusta edge-to-edge, inicializa preferências, registra listeners e chama
-              em sequência:
+- onCreate():
+    1. enableEdgeToEdge() → permite layout imersivo atrás das barras de sistema
+    2. inflate binding e setContentView() → carrega activity_main.xml
+    3. setOnApplyWindowInsetsListener() → ajusta padding para status/navigation bars
+    4. namePreferences = NamePreferences(this) → prepara leitura/escrita do nome do usuário
+    5. if (savedInstanceState != null):
+         • recupera 'filter' e 'currentPhrase' do Bundle
+         • reseta cor dos ícones para preto
+         • destaca ícone conforme 'filter'
+         • reexibe 'currentPhrase'
+       else:
+         • handleFilter(R.id.image_all_inclusive) → define filtro ALL e destaca ícone
+         • refreshPhrase() → busca e mostra uma frase nova
+    6. setListeners() → configura cliques em ícones e botão 'Nova Frase'
+    7. showUserName() → lê nome salvo e exibe saudação
 
-- 1. handleFilter(R.id.image_all) → destaca o ícone “Todos”
-- 2. refreshPhrase() → mostra frase inicial
-- 3. showUserName() → carrega e exibe o nome
+- onSaveInstanceState(outState: Bundle)
+    • chamado antes da Activity ser destruída (por rotação)
+    • Bundle é uma estrutura chave-valor usada pelo Android para armazenar dados simples entre estados de Activity
+    • grava 'filter' e 'currentPhrase' no Bundle para restauração futura
 
-- setListeners() registra this (a Activity) como ouvinte de clique em todas as Views de interesse.
-
-- onClick(view) é chamado para qualquer clique registrado; delega a ação para:
+- onClick(v: View) delegado pelo setListeners() é chamado para qualquer clique registrado; delega a ação para:
     - handleFilter(id) quando ícones são clicados
     - refreshPhrase() quando o botão “Nova Frase” é clicado
 
+- setListeners() registra this (a Activity) como ouvinte de clique em todas as Views de interesse.
+
 - handleFilter(id) ajusta o estado interno filter e usa highlightFilter(view) para pintar o ícone ativo.
 
-- refreshPhrase() busca do PhraseRepository uma frase de acordo com filter e atualiza o TextView.
+- refreshPhrase() busca do PhraseRepository uma frase de acordo com filter e atualiza o TextView e
+                  também armazena em currentPhrase para restauração futura.
 
 - showUserName() lê de SecurityPreferences o nome salvo e formata a saudação no TextView.
 
