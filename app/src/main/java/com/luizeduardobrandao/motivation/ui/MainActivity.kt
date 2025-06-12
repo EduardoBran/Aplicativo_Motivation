@@ -13,6 +13,7 @@ import com.luizeduardobrandao.motivation.databinding.ActivityMainBinding
 import com.luizeduardobrandao.motivation.helper.MotivationConstants
 import com.luizeduardobrandao.motivation.repository.NamePreferences
 import com.luizeduardobrandao.motivation.repository.PhraseRepository
+import java.util.Locale
 
 // MainActivity agora implementa View.OnClickListener para receber todos os cliques via onClick()
 class MainActivity : AppCompatActivity(), View.OnClickListener {
@@ -132,7 +133,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     // Busca uma nova frase do repositório, passando o filtro atual e atualiza o texto na tela.
     // Também armazena em currentPhrase para restauração futura.
     private fun refreshPhrase() {
-        currentPhrase = phraseRepository.getPhrase(filter)
+        currentPhrase = phraseRepository.getPhrase(filter, Locale.getDefault().language)
         binding.textviewPhrase.text = currentPhrase
     }
 
