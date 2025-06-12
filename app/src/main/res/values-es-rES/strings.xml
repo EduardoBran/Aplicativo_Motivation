@@ -5,6 +5,7 @@
 
     <string name="button_save">Guardar</string>
     <string name="button_new_phrase">Nueva frase</string>
+    <string name="button_language">Idioma Frase</string>
 
     <string name="hint_your_name">¿Cuál es tu nombre?</string>
 

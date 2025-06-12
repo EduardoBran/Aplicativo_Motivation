@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
@@ -14,6 +15,9 @@ import com.luizeduardobrandao.motivation.helper.MotivationConstants
 import com.luizeduardobrandao.motivation.repository.NamePreferences
 import com.luizeduardobrandao.motivation.repository.PhraseRepository
 import java.util.Locale
+import android.graphics.Paint
+import com.luizeduardobrandao.motivation.repository.Phrase
+import kotlin.random.Random
 
 // MainActivity agora implementa View.OnClickListener para receber todos os cliques via onClick()
 class MainActivity : AppCompatActivity(), View.OnClickListener {
@@ -32,6 +36,14 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     // Guarda a frase exibida para restaurar após rotação
     private var currentPhrase: String = ""
+
+    // Variável para armazenar o idioma atual
+    private var currentLanguage: String = Locale.getDefault().language
+
+    // lista corrente de frases no idioma atual
+    private lateinit var currentList: List<Phrase>
+    // índice da frase que está sendo exibida
+    private var currentIndex: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,6 +66,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         // Cria a instância de SecurityPreferences para ler e escrever NamePreferences
         namePreferences = NamePreferences(this)
+
+        // Chamar updateLanguageLabel()
+        updateLanguageLabel()
 
         // --- Restaura estado em caso de rotação ---
         if (savedInstanceState != null) {
@@ -110,6 +125,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
             // Se o botão “Nova Frase” for clicado, atualiza a frase
             R.id.button_new_phrase -> refreshPhrase()
+
+            R.id.button_languages -> showLanguageDialog()      // novo case
         }
     }
 
@@ -119,6 +136,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         binding.imageAllInclusive.setOnClickListener (this)
         binding.imageHappy.setOnClickListener (this)
         binding.imageFunny.setOnClickListener (this)
+        // Registra clique no botão “Idiomas”
+        binding.buttonLanguages.setOnClickListener(this)
     }
 
     // Lê o nome do usuário de SharedPreferences e atualiza o TextView de saudação.
@@ -133,7 +152,15 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     // Busca uma nova frase do repositório, passando o filtro atual e atualiza o texto na tela.
     // Também armazena em currentPhrase para restauração futura.
     private fun refreshPhrase() {
-        currentPhrase = phraseRepository.getPhrase(filter, Locale.getDefault().language)
+        // 1) gera a lista filtrada no idioma atual
+        currentList = phraseRepository
+            .getFilteredPhrases(filter, currentLanguage)
+
+        // 2) escolhe um índice aleatório dentro dessa lista
+        currentIndex = Random.nextInt(currentList.size)
+
+        // 3) exibe a frase desse índice
+        currentPhrase = currentList[currentIndex].description
         binding.textviewPhrase.text = currentPhrase
     }
 
@@ -170,47 +197,151 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         // Ao trocar o filtro, já exibe a frase correspondente
         refreshPhrase()
     }
+
+    // Exibe um diálogo com opções de idioma para frase
+    // e, ao selecionar, atualiza o idioma usado e recarrega a frase.
+    private fun showLanguageDialog() {
+        // 1) Labels visíveis para o usuário
+        val labels = arrayOf("Português", "English", "Français", "Español")
+        // 2) Códigos correspondentes usados internamente
+        val codes  = arrayOf("pt", "en", "fr", "es")
+
+        // 3) Busca o índice do idioma atualmente selecionado (ou 0 se não achar)
+        val checked = codes
+            .indexOf(currentLanguage)
+            .takeIf { it >= 0 }        // se for >=0, mantém; senão, vira null
+            ?: 0                       // se vier null, usa 0 (Português)
+
+        // 4) Constrói e mostra o AlertDialog de escolha única
+        AlertDialog.Builder(this)
+            .setTitle("Selecione um idioma") // título do diálogo
+            .setSingleChoiceItems(labels, checked) { dialog, which ->
+                // 5) Ao clicar em uma opção:
+                // 5.1) Atualiza a variável de idioma
+                currentLanguage = codes[which]
+                // 5.2) Aqui, apenas traduz
+                translateCurrentPhrase()
+                // 5.3) Atualiza o TextView com o idioma
+                updateLanguageLabel()
+                // 5.4) Fecha o diálogo
+                dialog.dismiss()
+            }
+            .show()
+    }
+
+    // Função para atualizar o rótulo e sublinhá-lo:
+    private fun updateLanguageLabel() {
+        // Traduzir código para nome legível
+        val displayName = when (currentLanguage) {
+            "pt" -> "Português"
+            "en" -> "English"
+            "fr" -> "Français"
+            "es" -> "Español"
+            else -> "Português"
+        }
+
+        // Aplica texto e sublinhado
+        binding.textviewCurrentLanguage.apply {
+            text = displayName
+            paintFlags = paintFlags or Paint.UNDERLINE_TEXT_FLAG
+        }
+    }
+
+    // Refiltra a mesma lista para o novo idioma e mantém o mesmo índice,
+    // trocando apenas o texto, sem sortear uma frase nova.
+    private fun translateCurrentPhrase() {
+        // 1) refiltra para o idioma recém-selecionado
+        val newList = phraseRepository
+            .getFilteredPhrases(filter, currentLanguage)
+
+        // 2) garante que o índice exista nessa nova lista
+        val idx = if (currentIndex < newList.size) currentIndex else 0
+
+        // 3) atribui e exibe o texto traduzido
+        currentPhrase = newList[idx].description
+        binding.textviewPhrase.text = currentPhrase
+    }
 }
 
 /*
 
-Como as funções se conectam
+/*
+Explicação didática de como o código funciona e como as funções se chamam:
 
-- onCreate():
-    1. enableEdgeToEdge() → permite layout imersivo atrás das barras de sistema
-    2. inflate binding e setContentView() → carrega activity_main.xml
-    3. setOnApplyWindowInsetsListener() → ajusta padding para status/navigation bars
-    4. namePreferences = NamePreferences(this) → prepara leitura/escrita do nome do usuário
-    5. if (savedInstanceState != null):
-         • recupera 'filter' e 'currentPhrase' do Bundle
-         • reseta cor dos ícones para preto
-         • destaca ícone conforme 'filter'
-         • reexibe 'currentPhrase'
-       else:
-         • handleFilter(R.id.image_all_inclusive) → define filtro ALL e destaca ícone
-         • refreshPhrase() → busca e mostra uma frase nova
-    6. setListeners() → configura cliques em ícones e botão 'Nova Frase'
-    7. showUserName() → lê nome salvo e exibe saudação
+1. onCreate(savedInstanceState: Bundle?)
+   - Chama enableEdgeToEdge() para renderização full-screen.
+   - Infla o layout via binding e chama setContentView(binding.root).
+   - Ajusta padding com setOnApplyWindowInsetsListener.
+   - Instancia NamePreferences para ler/escrever o nome.
+   - Chama updateLanguageLabel() para exibir o idioma atual.
+   - Se houve rotação (savedInstanceState != null):
+     • Restaura filter e currentPhrase do Bundle.
+     • Reseta cores e destaca o ícone correto via handleFilter().
+     • Reexibe currentPhrase em binding.textviewPhrase.
+   - Se é primeira criação:
+     • Chama handleFilter(R.id.image_all_inclusive) → define filter = ALL e destaca ícone.
+     • Chama refreshPhrase() → busca uma frase nova.
+   - Registra onClickListener em botões e ícones via setListeners().
+   - Chama showUserName() → lê o nome salvo e atualiza binding.textviewName.
 
-- onSaveInstanceState(outState: Bundle)
-    • chamado antes da Activity ser destruída (por rotação)
-    • Bundle é uma estrutura chave-valor usada pelo Android para armazenar dados simples entre estados de Activity
-    • grava 'filter' e 'currentPhrase' no Bundle para restauração futura
+2. setListeners()
+   - Associa this (MainActivity) como listener a:
+     • binding.buttonNewPhrase
+     • binding.imageAllInclusive, binding.imageHappy, binding.imageFunny
+     • binding.buttonLanguages
 
-- onClick(v: View) delegado pelo setListeners() é chamado para qualquer clique registrado; delega a ação para:
-    - handleFilter(id) quando ícones são clicados
-    - refreshPhrase() quando o botão “Nova Frase” é clicado
+3. onClick(v: View)
+   - Redireciona cliques para:
+     • handleFilter(id) quando clicam ícones de filtro.
+     • refreshPhrase() quando clicam “Nova Frase”.
+     • showLanguageDialog() quando clicam “Idiomas”.
 
-- setListeners() registra this (a Activity) como ouvinte de clique em todas as Views de interesse.
+4. handleFilter(id: Int)
+   - Pinta todos os ícones de preto.
+   - Atualiza a variável filter (ALL, HAPPY ou FUNNY).
+   - Destaca o ícone selecionado com highlightFilter().
+   - Chama refreshPhrase() para exibir frase do novo filtro.
 
-- handleFilter(id) ajusta o estado interno filter e usa highlightFilter(view) para pintar o ícone ativo.
+5. refreshPhrase()
+   - Usa PhraseRepository para obter a lista filtrada:
+       phraseRepository.getFilteredPhrases(filter, currentLanguage)
+     • Aqui ocorre a chamada ao mét0do em PhraseRepository que retorna
+       List<Phrase> filtrada por categoria (filter) e idioma (currentLanguage).
+   - Gera um índice aleatório (currentIndex) dentro dessa lista.
+   - Atualiza currentPhrase e exibe em binding.textviewPhrase.
 
-- refreshPhrase() busca do PhraseRepository uma frase de acordo com filter e atualiza o TextView e
-                  também armazena em currentPhrase para restauração futura.
+6. showUserName()
+   - Lê nome via namePreferences.getStoredString(KEY.PERSON_NAME).
+   - Atualiza binding.textviewName com getString(R.string.label_name_user, name).
 
-- showUserName() lê de SecurityPreferences o nome salvo e formata a saudação no TextView.
+7. showLanguageDialog()
+   - Prepara arrays de labels (“Português”, “English”, “Français”, “Español”) e códigos (“pt”, “en”, “fr”, “es”).
+   - Calcula índice checked para marcar o idioma atual.
+   - Exibe AlertDialog com .setSingleChoiceItems.
+   - Na seleção:
+     • Atualiza currentLanguage com codes[which].
+     • Chama translateCurrentPhrase() para trocar apenas o texto.
+     • Chama updateLanguageLabel() para sublinhar o novo idioma.
+     • Fecha o diálogo.
 
-Essa arquitetura mantém cada responsabilidade isolada e o fluxo de dados claro:
-usuário clica → onClick → lógica específica → atualização da UI.
+8. translateCurrentPhrase()
+   - Refiltra a lista com phraseRepository.getFilteredPhrases(filter, currentLanguage).
+   - Define idx (mesmo currentIndex se válido, ou 0).
+   - Atualiza currentPhrase e binding.textviewPhrase sem sorteio.
+
+9. updateLanguageLabel()
+   - Converte currentLanguage em displayName legível.
+   - Atualiza binding.textviewCurrentLanguage.text e aplica UNDERLINE.
+
+10. onSaveInstanceState(outState: Bundle)
+    - Grava filter e currentPhrase no Bundle antes da Activity ser destruída.
+
+Fluxo de chamadas resumido:
+  Usuário interage → onClick() → handleFilter() ou refreshPhrase() ou showLanguageDialog()
+  refreshPhrase() e translateCurrentPhrase() → invocam PhraseRepository.getFilteredPhrases(...)
+  PhraseRepository retorna lista de Phrase → MainActivity exibe description no TextView.
+
+Desta forma, cada componente tem responsabilidade única e o fluxo de dados permanece claro e previsível.
+*/
 
  */

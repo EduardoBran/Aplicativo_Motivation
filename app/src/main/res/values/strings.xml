@@ -3,6 +3,7 @@
 
     <string name="button_save">Salvar</string>
     <string name="button_new_phrase">Nova frase</string>
+    <string name="button_language">Idioma Frase</string>
 
     <string name="hint_your_name">Qual seu nome?</string>
 

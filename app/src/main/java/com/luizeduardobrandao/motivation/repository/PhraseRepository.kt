@@ -163,4 +163,11 @@ class PhraseRepository {
         //    filteredPhrases[randomIndex] é um objeto Phrase, e .description é a string que queremos
         return filteredPhrases[randomIndex].description
     }
+
+    fun getFilteredPhrases(category: Int, language: String): List<Phrase> =
+        listPhrases.filter {
+            (it.category == category || category == all)
+                    && it.language == language.lowercase()
+        }
+
 }
