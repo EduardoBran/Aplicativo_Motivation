@@ -20,3 +20,29 @@
     <string name="error_mandatory_name">Informe seu nome.</string>
 
 </resources>
+
+
+<!--
+
+*** Adicionar novos idiomas
+
+(Inglês)
+
+Clicar com botão direito em values < New < Value Resource File
+    - Dar o nome de strings
+    - Em Available qualifiers clicar em Locale e depois em ">>"
+    - No menu ao lado direito escolher o idioma em "Language" (english)
+        - e em "Specify Region Only": escolher "US: United states"
+    - Depois irá surgir uma pasta "strings" com "strings.xml" e "strings.xml" com a bandeira dos EUA
+
+(Francês)
+
+Clicar com botão direito em values < New < Value Resource File
+    - Dar o nome de strings
+    - Em Available qualifiers clicar em Locale e depois em ">>"
+    - No menu ao lado direito escolher o idioma em "Language" (french)
+        - e em "Specify Region Only": desta vez escolher "Any Region"
+    - Depois irá surgir na pasta "strings" um "strings.xml" sem bandeira.
+
+
+-->

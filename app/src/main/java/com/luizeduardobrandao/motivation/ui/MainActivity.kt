@@ -75,7 +75,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 MotivationConstants.PHRASEFILTER.FUNNY -> highlightFilter(binding.imageFunny)
             }
 
-            // 4) Reexibe exatamente a mesma frase que estava na tela
+            // 5) Reexibe exatamente a mesma frase que estava na tela
             binding.textviewPhrase.text = currentPhrase
 
         } else {
