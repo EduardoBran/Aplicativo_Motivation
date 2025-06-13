@@ -72,7 +72,7 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:fontFamily="@font/cabin"
-        android:padding="16dp"
+        android:padding="10dp"
         android:text="@string/label_phrase"
         android:textAlignment="center"
         android:textColor="@color/black"
@@ -84,7 +84,7 @@
         android:layout_height="3dp"
         android:layout_below="@id/textview_phrase"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="2dp"
         android:background="@color/dark_purple"
         android:elevation="4dp" />
 
